@@ -29,18 +29,12 @@ public class RotaController {
     @GetMapping("/rotas/{rotaId}")
     public ResponseEntity<Rota> getRotaById(@PathVariable (value = "rotaId") Long rotaId){
         Rota rota = rotaDao.findOne(rotaId);
-        if (rota == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(rota);
     }
 
     @PutMapping("/rotas/{rotaId}")
     public ResponseEntity<Rota> updateRota(@PathVariable(value = "rotaId") Long rotaId, @Validated @RequestBody Rota rotaDetails){
         Rota rota = rotaDao.findOne(rotaId);
-        if (rota == null) {
-            return ResponseEntity.notFound().build();
-        }
         rota.setAirline(rotaDetails.getAirline());
         rota.setToAirport(rotaDetails.getToAirport());
         rota.setWhereAirport(rotaDetails.getWhereAirport());
@@ -51,9 +45,6 @@ public class RotaController {
     @DeleteMapping("/rotas/{rotaId}")
     public ResponseEntity<Rota> deleteRota(@PathVariable(value = "rotaId") Long rotaId){
         Rota rota = rotaDao.findOne(rotaId);
-        if (rota == null){
-            return ResponseEntity.notFound().build();
-        }
         rotaDao.delete(rota);
         return ResponseEntity.ok().build();
     }

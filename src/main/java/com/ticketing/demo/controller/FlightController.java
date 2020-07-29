@@ -29,18 +29,12 @@ public class FlightController {
     @GetMapping("/flights/{flightId}")
     public ResponseEntity<Flight> getFlightById(@PathVariable(value = "flightId") Long flightId){
         Flight flight = flightDao.findOne(flightId);
-        if (flight == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(flight);
     }
 
     @PutMapping("flights/{flightId}")
     public ResponseEntity<Flight> updateFlight(@PathVariable(value = "flightId") Long flightId, @Validated @RequestBody Flight flightDetails){
         Flight flight = flightDao.findOne(flightId);
-        if (flight == null){
-            return ResponseEntity.notFound().build();
-        }
         flight.setDate(flightDetails.getDate());
         flight.setQuota(flightDetails.getQuota());
         flight.setRota(flightDetails.getRota());
@@ -51,9 +45,6 @@ public class FlightController {
     @DeleteMapping("flights/{flightId}")
     public ResponseEntity<Flight> deleteFlight(@PathVariable(value = "flightId") Long flightId){
         Flight flight = flightDao.findOne(flightId);
-        if (flight == null){
-            return ResponseEntity.notFound().build();
-        }
         flightDao.delete(flight);
         return ResponseEntity.ok().build();
     }

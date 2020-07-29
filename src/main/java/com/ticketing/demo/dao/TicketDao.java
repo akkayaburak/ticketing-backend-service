@@ -1,5 +1,6 @@
 package com.ticketing.demo.dao;
 
+import com.ticketing.demo.exception.TicketNotFoundException;
 import com.ticketing.demo.model.Ticket;
 import com.ticketing.demo.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,15 @@ public class TicketDao {
 
     public Ticket findOne(Long ticketId){
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
-        Ticket ticket = ticketOptional.get();
-        return ticket;
+        if (ticketOptional.isPresent()){
+            return ticketOptional.get();
+        }
+        throw new TicketNotFoundException();
     }
 
     public void delete(Ticket ticket){
         ticketRepository.delete(ticket);
     }
 
-    @Query("SELECT COUNT(tickets) FROM tickets WHERE tickets.rotaId=?1")
-    public Long countRotaIds(Long rotaId) {
-        return ticketRepository.flight(rotaId);
-    }
 
 }

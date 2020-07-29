@@ -28,17 +28,11 @@ public class AirportController {
     @GetMapping("/airports/{airportId}")
     public ResponseEntity<Airport> getAirportById(@PathVariable(value = "airportId") Long airportId){
         Airport airport = airportDao.findOne(airportId);
-        if(airport == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(airport);
     }
     @PutMapping("/airports/{airportId}")
     public ResponseEntity<Airport> updateAirport(@PathVariable(value = "airportId") Long airportId, @Validated @RequestBody Airport airportDetails){
         Airport airport = airportDao.findOne(airportId);
-        if (airport == null){
-            return ResponseEntity.notFound().build();
-        }
         airport.setAirportName(airportDetails.getAirportName());
         Airport updateAirport = airportDao.save(airport);
         return ResponseEntity.ok().body(updateAirport);
@@ -47,9 +41,6 @@ public class AirportController {
     @DeleteMapping("/airports/{airportId}")
     public ResponseEntity<Airport> deleteAirport(@PathVariable(value = "airportId") Long airportId){
         Airport airport = airportDao.findOne(airportId);
-        if (airport == null){
-            return ResponseEntity.notFound().build();
-        }
         airportDao.delete(airport);
         return ResponseEntity.ok().build();
     }

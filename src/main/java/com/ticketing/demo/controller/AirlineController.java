@@ -7,11 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/ticketing")
 public class AirlineController {
+    //private static Map<String, Airline> airlineRepo = new HashMap<>();
     @Autowired
     AirlineDao airlineDao;
 
@@ -28,18 +31,12 @@ public class AirlineController {
     @GetMapping("/airlines/{airlineId}")
     public ResponseEntity<Airline> getAirlineById(@PathVariable(value = "airlineId") Long airlineId){
         Airline airline = airlineDao.findOne(airlineId);
-        if(airline == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(airline);
     }
 
     @PutMapping("/airlines/{airlineId}")
     public ResponseEntity<Airline> updateAirline(@PathVariable(value = "airlineId") Long airlineId, @Validated @RequestBody Airline airlineDetails){
         Airline airline = airlineDao.findOne(airlineId);
-        if (airline == null){
-            return ResponseEntity.notFound().build();
-        }
         airline.setAirlineName(airlineDetails.getAirlineName());
         Airline updateAirline = airlineDao.save(airline);
         return ResponseEntity.ok().body(updateAirline);
@@ -48,9 +45,6 @@ public class AirlineController {
     @DeleteMapping("/airlines/{airlineId}")
     public ResponseEntity<Airline> deleteAirline(@PathVariable(value = "airlineId") Long airlineId){
         Airline airline = airlineDao.findOne(airlineId);
-        if (airline == null){
-            return ResponseEntity.notFound().build();
-        }
         airlineDao.delete(airline);
         return ResponseEntity.ok().build();
     }

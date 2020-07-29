@@ -1,6 +1,7 @@
 package com.ticketing.demo.controller;
 
 import com.ticketing.demo.Mask;
+import com.ticketing.demo.dao.FlightDao;
 import com.ticketing.demo.dao.TicketDao;
 import com.ticketing.demo.model.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class TicketController {
     @Autowired
     TicketDao ticketDao;
 
+    @Autowired
+    FlightDao flightDao;
+
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@Validated @RequestBody Ticket ticket){
         String number = ticket.getCreditCard().replaceAll("\\D+","");
@@ -24,10 +28,10 @@ public class TicketController {
         }
         ticket.setCreditCard(Mask.maskCardNumber(ticket.getCreditCard()));
         ticketDao.save(ticket);
-        //long rotaIdCount = ticketDao.countRotaIds(ticket.getFlight().getRota().getRotaId());
+        //long rotaIdCount = flightDao.countRotaId(ticket.getFlight().getRota().getRotaId());
         //long oldRotaIdCount = rotaIdCount - 1;
         //if(rotaIdCount == oldRotaIdCount + oldRotaIdCount/10){
-          //  ticket.getFlight().setPrice(ticket.getFlight().getPrice() + ticket.getFlight().getPrice()/10);
+            //ticket.getFlight().setPrice(ticket.getFlight().getPrice() + ticket.getFlight().getPrice()/10);
         //}
         return ResponseEntity.ok().build();
     }
@@ -40,11 +44,13 @@ public class TicketController {
     @GetMapping("/{ticketId}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable(value = "ticketId") Long ticketId){
         Ticket ticket = ticketDao.findOne(ticketId);
-        if (ticket == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(ticket);
     }
 
-
+    @DeleteMapping("/{ticketId}")
+    public ResponseEntity<Ticket> deleteTicket(@PathVariable(value = "ticketId") Long ticketId){
+        Ticket ticket = ticketDao.findOne(ticketId);
+        ticketDao.delete(ticket);
+        return ResponseEntity.ok().build();
+    }
 }

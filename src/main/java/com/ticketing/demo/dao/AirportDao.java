@@ -1,5 +1,6 @@
 package com.ticketing.demo.dao;
 
+import com.ticketing.demo.exception.AirportNotFoundException;
 import com.ticketing.demo.model.Airport;
 import com.ticketing.demo.repository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ public class AirportDao {
     }
     public Airport findOne(Long airportId){
         Optional<Airport> airportOptional = airportRepository.findById(airportId);
-        Airport airport = airportOptional.get();
-        return  airport;
+        if (airportOptional.isPresent()){
+            return airportOptional.get();
+        }
+        throw new AirportNotFoundException();
     }
     public void delete(Airport airport){
         airportRepository.delete(airport);
