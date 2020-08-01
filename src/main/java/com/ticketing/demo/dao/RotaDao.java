@@ -1,11 +1,13 @@
 package com.ticketing.demo.dao;
 
-import com.ticketing.demo.exception.RotaNotFoundException;
+import com.ticketing.demo.exception.NotFoundException;
 import com.ticketing.demo.model.Rota;
 import com.ticketing.demo.repository.RotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public class RotaDao {
         if (rotaOptional.isPresent()){
             return rotaOptional.get();
         }
-        throw new RotaNotFoundException();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rota not found!");
     }
     public void delete(Rota rota){
         rotaRepository.delete(rota);
