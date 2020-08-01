@@ -3,6 +3,7 @@ package com.ticketing.demo.controller;
 import com.ticketing.demo.Mask;
 import com.ticketing.demo.dao.FlightDao;
 import com.ticketing.demo.dao.TicketDao;
+import com.ticketing.demo.model.Flight;
 import com.ticketing.demo.model.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,23 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@Validated @RequestBody Ticket ticket){
+        long flightId = ticket.getFlight().getFlightId();
+        List<Ticket> tickets = ticketDao.findByFlightId(flightId);
+        if (ticket.getFlight().getQuota() == tickets.size() ){
+            return ResponseEntity.unprocessableEntity().build();
+        }
         String number = ticket.getCreditCard().replaceAll("\\D+","");
         if (number.length() != 16){
             return ResponseEntity.badRequest().build();
         }
         ticket.setCreditCard(Mask.maskCardNumber(ticket.getCreditCard()));
         ticketDao.save(ticket);
-        //long rotaIdCount = flightDao.countRotaId(ticket.getFlight().getRota().getRotaId());
-        //long oldRotaIdCount = rotaIdCount - 1;
-        //if(rotaIdCount == oldRotaIdCount + oldRotaIdCount/10){
-            //ticket.getFlight().setPrice(ticket.getFlight().getPrice() + ticket.getFlight().getPrice()/10);
-        //}
+        int flightIdCount = tickets.size();
+        Flight flight= flightDao.findOne(flightId);
+        if(flightIdCount >= flightDao.getQuota(flight).getQuota() /10){
+                flight.setPrice(flight.getPrice() + flight.getPrice()/10);
+                flightDao.save(flight);
+        }
         return ResponseEntity.ok().build();
     }
 

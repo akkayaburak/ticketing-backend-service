@@ -1,6 +1,7 @@
 package com.ticketing.demo.model;
 
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;

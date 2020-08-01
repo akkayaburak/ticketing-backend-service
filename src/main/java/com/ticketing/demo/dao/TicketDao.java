@@ -4,8 +4,6 @@ import com.ticketing.demo.exception.TicketNotFoundException;
 import com.ticketing.demo.model.Ticket;
 import com.ticketing.demo.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +15,6 @@ public class TicketDao {
     TicketRepository ticketRepository;
 
     public Ticket save(Ticket ticket){
-
         return ticketRepository.save(ticket);
     }
 
@@ -37,5 +34,8 @@ public class TicketDao {
         ticketRepository.delete(ticket);
     }
 
+    public List<Ticket> findByFlightId(Long flightId){
+        return ticketRepository.findByFlightFlightId(flightId);
+    }
 
 }

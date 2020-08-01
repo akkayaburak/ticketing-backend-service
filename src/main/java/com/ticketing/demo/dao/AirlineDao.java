@@ -30,4 +30,5 @@ public class AirlineDao {
     public void delete(Airline airline){
         airlineRepository.delete(airline);
     }
+
 }

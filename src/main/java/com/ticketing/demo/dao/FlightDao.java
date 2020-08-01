@@ -35,8 +35,7 @@ public class FlightDao {
         flightRepository.delete(flight);
     }
 
-    //@Query("SELECT COUNT(flights) FROM tickets WHERE flights.rotaId=?1")
-    //public Long countRotaId(Long rotaId) {
-        //return flightRepository.countRotaId(rotaId);
-    //}
+    public Flight getQuota(Flight flight){
+        return flightRepository.findByFlightId(flight.getFlightId());
+    }
 }
